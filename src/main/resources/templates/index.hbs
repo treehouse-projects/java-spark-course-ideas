@@ -1,10 +1,4 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Hello Students</title>
-</head>
-<body>
+{{#partial "content"}}
     {{#if username }}
         <h1>Welcome {{ username }}!</h1>
     {{ else }}
@@ -15,6 +9,6 @@
             <button>Sign in</button>
         </form>
     {{/if}}
+{{/partial}}
 
-</body>
-</html>
+{{> base.hbs}}
