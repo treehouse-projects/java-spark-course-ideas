@@ -1,5 +1,6 @@
 package com.teamtreehouse.courses;
 
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import com.teamtreehouse.courses.model.CourseIdea;
 import com.teamtreehouse.courses.model.CourseIdeaDAO;
 import com.teamtreehouse.courses.model.SimpleCourseIdeaDAO;
@@ -58,6 +59,12 @@ public class Main {
             res.redirect("/ideas");
             return null;
         });
+
+        get("/ideas/:slug", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            model.put("idea", dao.findBySlug(req.params("slug")));
+            return new ModelAndView(model, "idea.hbs");
+        }, new HandlebarsTemplateEngine());
 
         post("/ideas/:slug/vote", (req, res) -> {
             CourseIdea idea = dao.findBySlug(req.params("slug"));
