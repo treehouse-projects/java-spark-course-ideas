@@ -28,9 +28,9 @@ public class Main {
             Map<String, String> model = new HashMap<>();
             String username = req.queryParams("username");
             res.cookie("username", username);
-            model.put("username", username);
-            return new ModelAndView(model, "sign-in.hbs");
-        }, new HandlebarsTemplateEngine());
+            res.redirect("/");
+            return null;
+        });
 
         get("/ideas", (req, res) -> {
             Map<String, Object> model = new HashMap<>();
