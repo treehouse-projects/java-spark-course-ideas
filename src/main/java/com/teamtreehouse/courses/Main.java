@@ -1,5 +1,7 @@
 package com.teamtreehouse.courses;
 
+import com.teamtreehouse.courses.model.CourseIdeaDAO;
+import com.teamtreehouse.courses.model.SimpleCourseIdeaDAO;
 import spark.ModelAndView;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 
@@ -11,6 +13,8 @@ import static spark.Spark.post;
 
 public class Main {
     public static void main(String[] args) {
+
+        CourseIdeaDAO dao = new SimpleCourseIdeaDAO();
 
         get("/", (req, res) -> {
             Map<String, String> model = new HashMap<>();
