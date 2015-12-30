@@ -1,9 +1,11 @@
 {{#partial "content"}}
     {{#if username }}
         <h1>Welcome {{ username }}!</h1>
+
+        <p>View <a href="/ideas">all course ideas</a>.</p>
     {{ else }}
         <h1>Welcome Students!</h1>
-        <!-- TODO:csd - Add sign in! -->
+
         <form action="/sign-in" method="post">
             <input type="text" placeholder="What's your user name?" name="username">
             <button>Sign in</button>
