@@ -14,7 +14,7 @@ import java.util.Map;
 import static spark.Spark.*;
 
 public class Main {
-    private static final String FLASH_MESSAGE_KEY = "flash";
+    private static final String FLASH_MESSAGE_KEY = "flash_message";
 
     public static void main(String[] args) {
         staticFileLocation("/public");
@@ -28,9 +28,9 @@ public class Main {
 
         before("/ideas", (req, res) -> {
             if (req.attribute("username") == null) {
-                setFlashMessage(req, "Whoops please log in first!");
-               res.redirect("/");
-               halt();
+                setFlashMessage(req, "Whoops, please sign in first!");
+                res.redirect("/");
+                halt();
             }
         });
 
@@ -38,6 +38,7 @@ public class Main {
             Map<String, String> model = new HashMap<>();
             model.put("flashMessage", captureFlashMessage(req));
             model.put("username", req.attribute("username"));
+            model.put("flashMessage", captureFlashMessage(req));
             return new ModelAndView(model, "index.hbs");
         }, new HandlebarsTemplateEngine());
 
@@ -53,6 +54,7 @@ public class Main {
             Map<String, Object> model = new HashMap<>();
             model.put("flashMessage", captureFlashMessage(req));
             model.put("ideas", dao.findAll());
+            model.put("flashMessage", captureFlashMessage(req));
             return new ModelAndView(model, "ideas.hbs");
         }, new HandlebarsTemplateEngine());
 
@@ -73,11 +75,11 @@ public class Main {
 
         post("/ideas/:slug/vote", (req, res) -> {
             CourseIdea idea = dao.findBySlug(req.params("slug"));
-            boolean wasAdded = idea.addVoter(req.attribute("username"));
-            if (wasAdded) {
+            boolean added = idea.addVoter(req.attribute("username"));
+            if (added) {
                 setFlashMessage(req, "Thanks for your vote!");
             } else {
-                setFlashMessage(req, "Whoops you already voted!!!");
+                setFlashMessage(req, "You already voted!");
             }
             res.redirect("/ideas");
             return null;
@@ -92,8 +94,8 @@ public class Main {
         });
     }
 
-    private static void setFlashMessage(Request req, String msg) {
-        req.session().attribute(FLASH_MESSAGE_KEY, msg);
+    private static void setFlashMessage(Request req, String message) {
+        req.session().attribute(FLASH_MESSAGE_KEY, message);
     }
 
     private static String getFlashMessage(Request req) {
