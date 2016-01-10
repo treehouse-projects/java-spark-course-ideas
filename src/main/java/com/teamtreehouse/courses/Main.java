@@ -3,6 +3,7 @@ package com.teamtreehouse.courses;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import com.teamtreehouse.courses.model.CourseIdea;
 import com.teamtreehouse.courses.model.CourseIdeaDAO;
+import com.teamtreehouse.courses.model.NotFoundException;
 import com.teamtreehouse.courses.model.SimpleCourseIdeaDAO;
 import spark.ModelAndView;
 import spark.template.handlebars.HandlebarsTemplateEngine;
@@ -71,6 +72,14 @@ public class Main {
             idea.addVoter(req.attribute("username"));
             res.redirect("/ideas");
             return null;
+        });
+
+        exception(NotFoundException.class, (exc, req, res) -> {
+            res.status(404);
+            HandlebarsTemplateEngine engine = new HandlebarsTemplateEngine();
+            String html = engine.render(
+                    new ModelAndView(null, "not-found.hbs"));
+            res.body(html);
         });
     }
 }
